@@ -39,3 +39,6 @@ lerna-debug.log*
 
 # DOCKER
 data
+
+# MISC
+*.pem
