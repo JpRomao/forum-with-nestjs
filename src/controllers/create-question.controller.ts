@@ -1,11 +1,11 @@
 import { Controller, Post, UseGuards, Body } from '@nestjs/common'
 import { z } from 'zod'
 
-import { CurrentUser } from 'src/auth/current-user.decorator'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
-import { UserPayload } from 'src/auth/jwt-strategy'
-import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { CurrentUser } from '@/auth/current-user.decorator'
+import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
+import { UserPayload } from '@/auth/jwt-strategy'
+import { ZodValidationPipe } from '@/pipes/zod-validation.pipe'
+import { PrismaService } from '@/prisma/prisma.service'
 
 const createQuestionBodySchema = z.object({
   content: z.string(),
@@ -51,14 +51,19 @@ export class CreateQuestionController {
 
     const slugCount = await this.prisma.question.count({
       where: {
-        slug,
+        OR: [
+          {
+            slug,
+          },
+          {
+            slug: {
+              startsWith: `${slug}-`,
+            },
+          },
+        ],
       },
     })
 
-    if (slugCount) {
-      return `${slug}-${slugCount}`
-    }
-
-    return slug
+    return `${slug}-${slugCount + 1}`
   }
 }
