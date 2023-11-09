@@ -37,8 +37,6 @@ export class CreateQuestionController {
         authorId: user.sub,
       },
     })
-
-    return 'ok'
   }
 
   private async slugify(title: string) {
