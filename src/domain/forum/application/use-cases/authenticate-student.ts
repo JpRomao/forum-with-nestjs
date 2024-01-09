@@ -6,7 +6,6 @@ import { Encrypter } from '../cryptography/encrypter'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
 
 interface AuthenticateStudentUseCaseRequest {
-  name: string
   email: string
   password: string
 }
